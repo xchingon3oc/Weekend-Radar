@@ -1,9 +1,9 @@
-name: Update Deals
+name: Update Weekend Radar
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   update:
@@ -12,19 +12,24 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      
       - run: pip install requests
+      
       - run: python fetch_deals.py
         env:
           AMADEUS_KEY: ${{ secrets.AMADEUS_KEY }}
           AMADEUS_SECRET: ${{ secrets.AMADEUS_SECRET }}
           TICKETMASTER_KEY: ${{ secrets.TICKETMASTER_KEY }}
           EVENTBRITE_TOKEN: ${{ secrets.EVENTBRITE_TOKEN }}
+          FOURSQUARE_KEY: ${{ secrets.FOURSQUARE_KEY }}
+      
       - run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
           git add *.json
-          git commit -m "Update deals" || exit 0
+          git commit -m "Update deals $(date +'%Y-%m-%d %H:%M')" || exit 0
           git push
