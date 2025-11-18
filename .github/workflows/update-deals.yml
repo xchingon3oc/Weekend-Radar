@@ -1,19 +1,30 @@
-env:
-  AMADEUS_KEY: ${{ secrets.AMADEUS_KEY }}
-  AMADEUS_SECRET: ${{ secrets.AMADEUS_SECRET }}
-  TICKETMASTER_KEY: ${{ secrets.TICKETMASTER_KEY }}
-  EVENTBRITE_TOKEN: ${{ secrets.EVENTBRITE_TOKEN }}
-```
+name: Update Deals
 
-This tells GitHub: *"Get the keys from the secrets I added"*
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
 
----
-
-### **Your actual API keys go in Step 5:**
-
-**Settings → Secrets and variables → Actions → New repository secret**
-
-That's where you paste your real keys:
-```
-Name: AMADEUS_KEY
-Value: abc123xyz456...  ← Your actual key goes here
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: python fetch_deals.py
+        env:
+          AMADEUS_KEY: ${{ secrets.AMADEUS_KEY }}
+          AMADEUS_SECRET: ${{ secrets.AMADEUS_SECRET }}
+          TICKETMASTER_KEY: ${{ secrets.TICKETMASTER_KEY }}
+          EVENTBRITE_TOKEN: ${{ secrets.EVENTBRITE_TOKEN }}
+      - run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add *.json
+          git commit -m "Update deals" || exit 0
+          git push
