@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekend Radar - Cheap Flights & Hotels from SoCal</title>
+    <meta name="description" content="Weekend Radar finds the cheapest weekend flights and hotels from LAX, ONT, and SNA airports. Free alerts, auto-updated deals.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Weekend Radar - SoCal Travel Deals">
+    <meta property="og:description" content="Auto-updated weekend flight and hotel deals from LAX, ONT, SNA. Free alerts.">
+    <meta property="og:type" content="website">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --radar-green: #22c55e;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .update-banner {
+            background: var(--dark);
+            color: #9ca3af;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        .update-time {
+            color: var(--radar-green);
+            font-weight: 600;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: white;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Radar sweep animation */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(34, 197, 94, 0.1) 30deg, transparent 60deg);
+            animation: radar-sweep 4s linear infinite;
+            transform-origin: center;
+        }
+        
+        @keyframes radar-sweep {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            color: var(--radar-green);
+        }
+        
+        .hero p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .airports {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        
+        .airport {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid var(--radar-green);
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: var(--radar-green);
+        }
+        
+        .signup-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            max-width: 450px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        
+        .signup-box h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .btn-signup {
+            width: 100%;
+            background: var(--radar-green);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-signup:hover {
+            background: #16a34a;
+        }
+        
+        .signup-count {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+        
+        .southwest-banner {
+            background: #304CB2;
+            color: white;
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .southwest-banner a {
+            color: #FFBF27;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .deal-count {
+            background: var(--radar-green);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .deals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        .deal-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--radar-green);
+            transition: transform 0.2s;
+        }
+        
+        .deal-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .deal-card.hot {
+            border-left-color: var(--danger);
+        }
+        
+        .deal-badge {
+            display: inline-block;
+            background: #fecaca;
+            color: var(--danger);
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .deal-route {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        
+        .deal-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--success);
+        }
+        
+        .deal-original {
+            text-decoration: line-through;
+            color: #9ca3af;
+            font-size: 0.95rem;
+        }
+        
+        .deal-savings {
+            color: var(--danger);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .deal-info {
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .btn-book {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .hotel-card {
+            border-left-color: var(--secondary);
+        }
+        
+        .hotel-rating {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .event-card {
+            border-left-color: #8b5cf6;
+        }
+        
+        .event-category {
+            display: inline-block;
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-date {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+        }
+        
+        .no-data {
+            background: #fef3c7;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            color: #92400e;
+        }
+        
+        /* How It Works */
+        .how-section {
+            background: white;
+            padding: 3rem 1rem;
+        }
+        
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .how-item {
+            text-align: center;
+        }
+        
+        .how-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .how-item h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .how-item p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            background: var(--dark);
+            color: #9ca3af;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        .footer a {
+            color: #9ca3af;
+            margin: 0 0.75rem;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: white;
+        }
+        
+        .success-message {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .deals-grid { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Last Updated Banner -->
+    <div class="update-banner">
+        📡 Last scan: <span class="update-time" id="lastUpdated">Loading...</span>
+        • Weekend Radar scans every 6 hours
+    </div>
+    
+    <!-- Southwest Warning -->
+    <div class="southwest-banner">
+        ⚠️ <strong>Radar blind spot:</strong> Southwest doesn't share data. 
+        <a href="https://www.southwest.com/air/booking/" target="_blank">Check Southwest.com directly →</a>
+        (2 free bags!)
+    </div>
+    
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo">📡</div>
+            <h1>Weekend Radar</h1>
+            <p>Scanning for the best weekend deals from SoCal airports. Auto-updated flight, hotel & event prices so you don't have to search.</p>
+            
+            <div class="airports">
+                <div class="airport">LAX</div>
+                <div class="airport">ONT</div>
+                <div class="airport">SNA</div>
+            </div>
+            
+            <div class="signup-box">
+                <h3>📡 Get on the Radar</h3>
+                <form id="signupForm" onsubmit="handleSignup(event)">
+                    <input type="email" class="form-input" placeholder="Your email" required id="emailInput">
+                    <button type="submit" class="btn-signup">Join Free • No Spam</button>
+                </form>
+                <div class="success-message" id="successMessage">
+                    ✅ You're on the radar! First alert coming soon.
+                </div>
+                <p class="signup-count"><span id="signupCount">0</span> people tracking deals</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Flights -->
+    <section class="container">
+        <div class="section-header">
+            <h2 class="section-title">✈️ Flight Deals Detected</h2>
+            <span class="deal-count" id="flightCount">Scanning...</span>
+        </div>
+        <div class="deals-grid" id="flightsGrid">
+            <div class="loading">📡 Scanning for flight deals...</div>
+        </div>
+    </section>
+    
+    <!-- Hotels -->
+    <section class="container" style="background: white; padding-top: 2rem; padding-bottom: 2rem;">
+        <div class="section-header">
+            <h2 class="section-title">🏨 Hotel Deals Detected</h2>
+            <span class="deal-count" id="hotelCount">Scanning...</span>
+        </div>
+        <div class="deals-grid" id="hotelsGrid">
+            <div class="loading">📡 Scanning for hotel deals...</div>
+        </div>
+    </section>
+    
+    <!-- Events -->
+    <section class="container">
+        <div class="section-header">
+            <h2 class="section-title">🎭 Events on Radar</h2>
+            <span class="deal-count" id="eventCount">Scanning...</span>
+        </div>
+        <div class="deals-grid" id="eventsGrid">
+            <div class="loading">📡 Scanning for events...</div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-section">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">How Weekend Radar Works</h2>
+            <div class="how-grid">
+                <div class="how-item">
+                    <div class="how-icon">📡</div>
+                    <h3>Auto-Scanning</h3>
+                    <p>We scan flight and hotel prices every 6 hours from LAX, ONT, and SNA airports</p>
+                </div>
+                <div class="how-item">
+                    <div class="how-icon">🎯</div>
+                    <h3>Deal Detection</h3>
+                    <p>When prices drop significantly below average, we flag them as hot deals</p>
+                </div>
+                <div class="how-item">
+                    <div class="how-icon">🔔</div>
+                    <h3>Alert System</h3>
+                    <p>Get notified when radar detects deals matching your preferences</p>
+                </div>
+                <div class="how-item">
+                    <div class="how-icon">✈️</div>
+                    <h3>You Save</h3>
+                    <p>Book the deal or skip it - no pressure, just information</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p style="margin-bottom: 0.5rem;">
+            <strong style="color: var(--radar-green);">Weekend Radar</strong> • SoCal's Deal Scanner
+        </p>
+        <p>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Affiliate Disclosure</a>
+        </p>
+        <p style="margin-top: 0.75rem; font-size: 0.8rem;">
+            © 2024 Weekend Radar • Prices auto-updated • Affiliate links help keep the radar running
+        </p>
+    </footer>
+    
+    <script>
+        // Load signup count
+        function updateSignupCount() {
+            const subscribers = JSON.parse(localStorage.getItem('weekend_radar_subs') || '[]');
+            document.getElementById('signupCount').textContent = subscribers.length;
+        }
+        
+        // Load metadata
+        async function loadMetadata() {
+            try {
+                const response = await fetch('./metadata.json');
+                const data = await response.json();
+                
+                const lastUpdated = new Date(data.lastUpdated);
+                const timeAgo = getTimeAgo(lastUpdated);
+                document.getElementById('lastUpdated').textContent = timeAgo;
+                
+            } catch (error) {
+                document.getElementById('lastUpdated').textContent = 'Just now';
+            }
+        }
+        
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+            return `${Math.floor(seconds / 86400)} days ago`;
+        }
+        
+        // Load flights
+        async function loadFlights() {
+            try {
+                const response = await fetch('./deals_data.json');
+                const flights = await response.json();
+                
+                document.getElementById('flightCount').textContent = `${flights.length} detected`;
+                
+                if (flights.length === 0) {
+                    document.getElementById('flightsGrid').innerHTML = '<div class="no-data">No deals on radar. Check back soon!</div>';
+                    return;
+                }
+                
+                flights.sort((a, b) => b.savingsPercent - a.savingsPercent);
+                
+                document.getElementById('flightsGrid').innerHTML = flights.slice(0, 6).map(flight => `
+                    <div class="deal-card ${flight.isHot ? 'hot' : ''}">
+                        ${flight.isHot ? '<span class="deal-badge">🔥 HOT DEAL</span>' : ''}
+                        <div class="deal-route">${flight.origin} → ${getDestName(flight.destination)}</div>
+                        <div class="deal-price">$${Math.round(flight.price)} <span class="deal-original">$${Math.round(flight.originalPrice)}</span></div>
+                        <div class="deal-savings">Save ${flight.savingsPercent}%</div>
+                        <div class="deal-info">
+                            ✈️ ${flight.airline}<br>
+                            📅 ${formatDate(flight.departureDate)} - ${formatDate(flight.returnDate)}
+                        </div>
+                        <button class="btn-book" onclick="window.open('${flight.bookingUrl}', '_blank')">
+                            View Deal
+                        </button>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                document.getElementById('flightsGrid').innerHTML = '<div class="no-data">Radar offline. Refresh to retry.</div>';
+            }
+        }
+        
+        // Load hotels
+        async function loadHotels() {
+            try {
+                const response = await fetch('./hotels_data.json');
+                const hotels = await response.json();
+                
+                document.getElementById('hotelCount').textContent = `${hotels.length} detected`;
+                
+                if (hotels.length === 0) {
+                    document.getElementById('hotelsGrid').innerHTML = '<div class="no-data">No hotel deals detected.</div>';
+                    return;
+                }
+                
+                document.getElementById('hotelsGrid').innerHTML = hotels.map(hotel => `
+                    <div class="deal-card hotel-card">
+                        <div class="deal-route">${hotel.name}</div>
+                        <div class="hotel-rating">📍 ${hotel.city} • ${'⭐'.repeat(hotel.starRating)} ${hotel.userRating}/5</div>
+                        <div class="deal-price">$${Math.round(hotel.pricePerNight)}/nt <span class="deal-original">$${Math.round(hotel.originalPrice)}</span></div>
+                        <div class="deal-savings">Save ${hotel.savingsPercent}%</div>
+                        <div class="deal-info">
+                            📅 ${formatDate(hotel.checkIn)} - ${formatDate(hotel.checkOut)}
+                        </div>
+                        <button class="btn-book" style="background: var(--secondary);" onclick="window.open('${hotel.bookingUrl}', '_blank')">
+                            View Hotel
+                        </button>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                document.getElementById('hotelsGrid').innerHTML = '<div class="no-data">Hotel radar offline.</div>';
+            }
+        }
+        
+        // Load events
+        async function loadEvents() {
+            try {
+                const response = await fetch('./events_data.json');
+                const events = await response.json();
+                
+                document.getElementById('eventCount').textContent = `${events.length} detected`;
+                
+                if (events.length === 0) {
+                    document.getElementById('eventsGrid').innerHTML = '<div class="no-data">No events detected.</div>';
+                    return;
+                }
+                
+                document.getElementById('eventsGrid').innerHTML = events.slice(0, 6).map(event => `
+                    <div class="deal-card event-card">
+                        <span class="event-category">${event.category}</span>
+                        <div class="deal-route">${event.name}</div>
+                        <div class="deal-info">
+                            📍 ${event.venue}, ${event.city}<br>
+                            <span class="event-date">📅 ${formatDate(event.date)} at ${event.time}</span>
+                        </div>
+                        <div class="deal-price" style="font-size: 1.4rem;">
+                            ${event.priceMin > 0 ? `$${event.priceMin} - $${event.priceMax}` : 'Free'}
+                        </div>
+                        <button class="btn-book" style="background: #8b5cf6;" onclick="window.open('${event.url}', '_blank')">
+                            Get Tickets
+                        </button>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                document.getElementById('eventsGrid').innerHTML = '<div class="no-data">Event radar offline.</div>';
+            }
+        }
+        
+        function getDestName(code) {
+            const names = {
+                'LAS': 'Las Vegas',
+                'SFO': 'San Francisco',
+                'PHX': 'Phoenix',
+                'SEA': 'Seattle',
+                'DEN': 'Denver',
+                'SAN': 'San Diego',
+                'PDX': 'Portland'
+            };
+            return names[code] || code;
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+        
+        // Handle signup
+        function handleSignup(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            
+            const subscribers = JSON.parse(localStorage.getItem('weekend_radar_subs') || '[]');
+            if (!subscribers.some(s => s.email === email)) {
+                subscribers.push({ email, date: new Date().toISOString() });
+                localStorage.setItem('weekend_radar_subs', JSON.stringify(subscribers));
+            }
+            
+            updateSignupCount();
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+        }
+        
+        // Initialize
+        updateSignupCount();
+        loadMetadata();
+        loadFlights();
+        loadHotels();
+        loadEvents();
+    </script>
+</body>
+</html>
