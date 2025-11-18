@@ -12,7 +12,7 @@
     "imageUrl": ""
   },
   {
-    "name": "Golden State Warriors vs Lakers",
+    "name": "Lakers vs Warriors",
     "city": "San Francisco",
     "venue": "Chase Center",
     "date": "2025-11-28",
@@ -20,18 +20,6 @@
     "priceMin": 150,
     "priceMax": 800,
     "category": "Sports",
-    "url": "https://www.ticketmaster.com",
-    "imageUrl": ""
-  },
-  {
-    "name": "Comedy Night Live",
-    "city": "Phoenix",
-    "venue": "Stand Up Live",
-    "date": "2025-11-23",
-    "time": "20:00",
-    "priceMin": 25,
-    "priceMax": 45,
-    "category": "Comedy",
     "url": "https://www.ticketmaster.com",
     "imageUrl": ""
   }

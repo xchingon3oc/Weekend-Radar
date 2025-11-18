@@ -1,8 +1,10 @@
 {
-  "lastUpdated": "2025-11-18T05:15:47.268399",
-  "totalFlights": 5,
-  "totalHotels": 3,
-  "totalEvents": 3,
+  "lastUpdated": "2025-11-18T06:01:00.871451",
+  "totalFlights": 3,
+  "totalHotels": 2,
+  "totalEvents": 2,
+  "totalDining": 0,
+  "totalBars": 0,
   "origins": [
     "LAX",
     "ONT",
@@ -14,6 +16,17 @@
     "PHX",
     "SEA",
     "DEN",
-    "SAN"
+    "SAN",
+    "PDX",
+    "SLC",
+    "BOS",
+    "NYC",
+    "MIA",
+    "AUS",
+    "CHI",
+    "ATL",
+    "HNL",
+    "OGG",
+    "LIH"
   ]
 }

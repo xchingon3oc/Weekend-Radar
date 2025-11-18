@@ -7,18 +7,12 @@
     "starRating": 5,
     "userRating": 4.7,
     "reviewCount": 12500,
-    "amenities": [
-      "Pool",
-      "Spa",
-      "Casino",
-      "Fine Dining"
-    ],
     "checkIn": "2025-11-21",
     "checkOut": "2025-11-23",
     "savings": 130,
     "savingsPercent": 45,
     "bookingUrl": "https://www.booking.com/hotel/us/the-venetian-resort.html",
-    "foundAt": "2025-11-18T05:15:47.267969"
+    "foundAt": "2025-11-18T06:01:00.870816"
   },
   {
     "name": "Hilton San Francisco Union Square",
@@ -28,36 +22,11 @@
     "starRating": 4,
     "userRating": 4.3,
     "reviewCount": 8900,
-    "amenities": [
-      "Gym",
-      "Restaurant",
-      "Business Center"
-    ],
     "checkIn": "2025-11-21",
     "checkOut": "2025-11-23",
     "savings": 123,
     "savingsPercent": 39,
     "bookingUrl": "https://www.booking.com/hotel/us/hilton-san-francisco.html",
-    "foundAt": "2025-11-18T05:15:47.267975"
-  },
-  {
-    "name": "Hyatt Regency Phoenix",
-    "city": "Phoenix",
-    "pricePerNight": 129,
-    "originalPrice": 198,
-    "starRating": 4,
-    "userRating": 4.2,
-    "reviewCount": 5600,
-    "amenities": [
-      "Pool",
-      "Gym",
-      "Restaurant"
-    ],
-    "checkIn": "2025-11-21",
-    "checkOut": "2025-11-23",
-    "savings": 69,
-    "savingsPercent": 35,
-    "bookingUrl": "https://www.booking.com/hotel/us/hyatt-regency-phoenix.html",
-    "foundAt": "2025-11-18T05:15:47.267981"
+    "foundAt": "2025-11-18T06:01:00.870821"
   }
 ]
