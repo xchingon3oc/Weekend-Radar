@@ -1,0 +1,19 @@
+{
+  "lastUpdated": "2025-11-18T05:15:47.268399",
+  "totalFlights": 5,
+  "totalHotels": 3,
+  "totalEvents": 3,
+  "origins": [
+    "LAX",
+    "ONT",
+    "SNA"
+  ],
+  "destinations": [
+    "LAS",
+    "SFO",
+    "PHX",
+    "SEA",
+    "DEN",
+    "SAN"
+  ]
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "origin": "LAX",
+    "destination": "LAS",
+    "price": 89,
+    "originalPrice": 156,
+    "airline": "Spirit",
+    "departureDate": "2025-11-21",
+    "returnDate": "2025-11-23",
+    "savings": 67,
+    "savingsPercent": 43,
+    "isHot": true,
+    "foundAt": "2025-11-18T05:15:47.267930",
+    "bookingUrl": "https://www.kayak.com/flights/LAX-LAS"
+  },
+  {
+    "origin": "ONT",
+    "destination": "SFO",
+    "price": 124,
+    "originalPrice": 198,
+    "airline": "United",
+    "departureDate": "2025-11-21",
+    "returnDate": "2025-11-23",
+    "savings": 74,
+    "savingsPercent": 37,
+    "isHot": true,
+    "foundAt": "2025-11-18T05:15:47.267939",
+    "bookingUrl": "https://www.kayak.com/flights/ONT-SFO"
+  },
+  {
+    "origin": "SNA",
+    "destination": "PHX",
+    "price": 67,
+    "originalPrice": 134,
+    "airline": "American",
+    "departureDate": "2025-11-21",
+    "returnDate": "2025-11-23",
+    "savings": 67,
+    "savingsPercent": 50,
+    "isHot": true,
+    "foundAt": "2025-11-18T05:15:47.267945",
+    "bookingUrl": "https://www.kayak.com/flights/SNA-PHX"
+  },
+  {
+    "origin": "LAX",
+    "destination": "SEA",
+    "price": 148,
+    "originalPrice": 267,
+    "airline": "Alaska",
+    "departureDate": "2025-11-21",
+    "returnDate": "2025-11-23",
+    "savings": 119,
+    "savingsPercent": 45,
+    "isHot": true,
+    "foundAt": "2025-11-18T05:15:47.267953",
+    "bookingUrl": "https://www.kayak.com/flights/LAX-SEA"
+  },
+  {
+    "origin": "ONT",
+    "destination": "DEN",
+    "price": 156,
+    "originalPrice": 245,
+    "airline": "Frontier",
+    "departureDate": "2025-11-21",
+    "returnDate": "2025-11-23",
+    "savings": 89,
+    "savingsPercent": 36,
+    "isHot": true,
+    "foundAt": "2025-11-18T05:15:47.267959",
+    "bookingUrl": "https://www.kayak.com/flights/ONT-DEN"
+  }
+]
