@@ -1,9 +1,15 @@
 name: Update Weekend Radar
 
+# Runs TWICE WEEKLY to stay within Amadeus free tier (500 calls/month)
+# Wednesday + Saturday at 6 AM UTC (10 PM PST the night before)
+# 3 airports × 18 destinations × 2 runs/week = ~108 calls/week = ~432/month ✅ FREE!
+# Manual runs available via "Run workflow" button anytime
+
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+    - cron: '0 6 * * 3'  # Every Wednesday at 6 AM UTC (Tuesday 10 PM Pacific)
+    - cron: '0 6 * * 6'  # Every Saturday at 6 AM UTC (Friday 10 PM Pacific)
+  workflow_dispatch:  # Manual trigger anytime
 
 jobs:
   update:
