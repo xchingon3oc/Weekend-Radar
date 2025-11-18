@@ -1,0 +1,19 @@
+env:
+  AMADEUS_KEY: ${{ secrets.AMADEUS_KEY }}
+  AMADEUS_SECRET: ${{ secrets.AMADEUS_SECRET }}
+  TICKETMASTER_KEY: ${{ secrets.TICKETMASTER_KEY }}
+  EVENTBRITE_TOKEN: ${{ secrets.EVENTBRITE_TOKEN }}
+```
+
+This tells GitHub: *"Get the keys from the secrets I added"*
+
+---
+
+### **Your actual API keys go in Step 5:**
+
+**Settings → Secrets and variables → Actions → New repository secret**
+
+That's where you paste your real keys:
+```
+Name: AMADEUS_KEY
+Value: abc123xyz456...  ← Your actual key goes here
