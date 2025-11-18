@@ -3,13 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekend Radar - Cheap Flights & Hotels from SoCal</title>
-    <meta name="description" content="Weekend Radar finds the cheapest weekend flights and hotels from LAX, ONT, and SNA airports. Free alerts, auto-updated deals.">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Weekend Radar - SoCal Travel Deals">
-    <meta property="og:description" content="Auto-updated weekend flight and hotel deals from LAX, ONT, SNA. Free alerts.">
-    <meta property="og:type" content="website">
+    <title>Weekend Radar - SoCal Travel Deals Scanner</title>
+    <meta name="description" content="Auto-updated weekend flight, hotel & activity deals from LAX, ONT, SNA. Filter by airport and category.">
     
     <style>
         :root {
@@ -53,7 +48,6 @@
             overflow: hidden;
         }
         
-        /* Radar sweep animation */
         .hero::before {
             content: '';
             position: absolute;
@@ -94,6 +88,23 @@
             margin: 0 auto 1.5rem;
         }
         
+        .filters {
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .form-select, .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: rgba(255,255,255,0.95);
+        }
+        
         .airports {
             display: flex;
             justify-content: center;
@@ -126,15 +137,6 @@
             font-size: 1.1rem;
         }
         
-        .form-input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
-        }
-        
         .btn-signup {
             width: 100%;
             background: var(--radar-green);
@@ -150,13 +152,6 @@
         
         .btn-signup:hover {
             background: #16a34a;
-        }
-        
-        .signup-count {
-            text-align: center;
-            font-size: 0.85rem;
-            color: #6b7280;
-            margin-top: 0.5rem;
         }
         
         .southwest-banner {
@@ -277,36 +272,6 @@
             font-size: 0.9rem;
         }
         
-        .hotel-card {
-            border-left-color: var(--secondary);
-        }
-        
-        .hotel-rating {
-            color: var(--secondary);
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-        }
-        
-        .event-card {
-            border-left-color: #8b5cf6;
-        }
-        
-        .event-category {
-            display: inline-block;
-            background: #ede9fe;
-            color: #7c3aed;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .event-date {
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
         .loading {
             text-align: center;
             padding: 2rem;
@@ -321,37 +286,49 @@
             color: #92400e;
         }
         
-        /* How It Works */
-        .how-section {
-            background: white;
+        .roi-section {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
             padding: 3rem 1rem;
         }
         
-        .how-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            max-width: 900px;
+        .roi-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 800px;
             margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2);
         }
         
-        .how-item {
+        .roi-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .roi-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .roi-result {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
             text-align: center;
         }
         
-        .how-icon {
+        .roi-result.money {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .roi-number {
             font-size: 2.5rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .how-item h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-        
-        .how-item p {
-            color: #6b7280;
-            font-size: 0.9rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
         }
         
         .footer {
@@ -368,10 +345,6 @@
             text-decoration: none;
         }
         
-        .footer a:hover {
-            color: white;
-        }
-        
         .success-message {
             display: none;
             background: #dcfce7;
@@ -383,8 +356,8 @@
         
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
+            .filters { grid-template-columns: 1fr; }
             .deals-grid { grid-template-columns: 1fr; }
-            .section-header { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
         }
     </style>
 </head>
@@ -392,13 +365,13 @@
     <!-- Last Updated Banner -->
     <div class="update-banner">
         📡 Last scan: <span class="update-time" id="lastUpdated">Loading...</span>
-        • Weekend Radar scans every 6 hours
+        • Auto-updates every 6 hours
     </div>
     
     <!-- Southwest Warning -->
     <div class="southwest-banner">
         ⚠️ <strong>Radar blind spot:</strong> Southwest doesn't share data. 
-        <a href="https://www.southwest.com/air/booking/" target="_blank">Check Southwest.com directly →</a>
+        <a href="https://www.southwest.com/air/booking/" target="_blank">Check Southwest.com →</a>
         (2 free bags!)
     </div>
     
@@ -407,7 +380,27 @@
         <div class="hero-content">
             <div class="logo">📡</div>
             <h1>Weekend Radar</h1>
-            <p>Scanning for the best weekend deals from SoCal airports. Auto-updated flight, hotel & event prices so you don't have to search.</p>
+            <p>Scanning for the best weekend deals from SoCal airports. Filter by your airport and interests.</p>
+            
+            <!-- Filters -->
+            <div class="filters">
+                <select id="airportFilter" class="form-select" onchange="applyFilters()">
+                    <option value="all">All Airports</option>
+                    <option value="LAX">LAX - Los Angeles</option>
+                    <option value="ONT">ONT - Ontario</option>
+                    <option value="SNA">SNA - John Wayne (OC)</option>
+                </select>
+                <select id="categoryFilter" class="form-select" onchange="applyFilters()">
+                    <option value="all">All Categories</option>
+                    <option value="flights">✈️ Flights</option>
+                    <option value="hotels">🏨 Hotels</option>
+                    <option value="arts">🎭 Arts & Theater</option>
+                    <option value="sports">🏈 Sports</option>
+                    <option value="comedy">😂 Comedy</option>
+                    <option value="dining">🍽️ Dining</option>
+                    <option value="bars">🍺 Bars & Nightlife</option>
+                </select>
+            </div>
             
             <div class="airports">
                 <div class="airport">LAX</div>
@@ -422,71 +415,67 @@
                     <button type="submit" class="btn-signup">Join Free • No Spam</button>
                 </form>
                 <div class="success-message" id="successMessage">
-                    ✅ You're on the radar! First alert coming soon.
+                    ✅ You're on the radar!
                 </div>
-                <p class="signup-count"><span id="signupCount">0</span> people tracking deals</p>
             </div>
         </div>
     </section>
     
-    <!-- Flights -->
-    <section class="container">
+    <!-- Deals Display -->
+    <section class="container" id="dealsSection">
         <div class="section-header">
-            <h2 class="section-title">✈️ Flight Deals Detected</h2>
-            <span class="deal-count" id="flightCount">Scanning...</span>
+            <h2 class="section-title" id="sectionTitle">📡 All Deals</h2>
+            <span class="deal-count" id="dealCount">Scanning...</span>
         </div>
-        <div class="deals-grid" id="flightsGrid">
-            <div class="loading">📡 Scanning for flight deals...</div>
+        <div class="deals-grid" id="dealsGrid">
+            <div class="loading">📡 Scanning for deals...</div>
         </div>
     </section>
     
-    <!-- Hotels -->
-    <section class="container" style="background: white; padding-top: 2rem; padding-bottom: 2rem;">
-        <div class="section-header">
-            <h2 class="section-title">🏨 Hotel Deals Detected</h2>
-            <span class="deal-count" id="hotelCount">Scanning...</span>
-        </div>
-        <div class="deals-grid" id="hotelsGrid">
-            <div class="loading">📡 Scanning for hotel deals...</div>
-        </div>
-    </section>
-    
-    <!-- Events -->
-    <section class="container">
-        <div class="section-header">
-            <h2 class="section-title">🎭 Events on Radar</h2>
-            <span class="deal-count" id="eventCount">Scanning...</span>
-        </div>
-        <div class="deals-grid" id="eventsGrid">
-            <div class="loading">📡 Scanning for events...</div>
-        </div>
-    </section>
-    
-    <!-- How It Works -->
-    <section class="how-section">
+    <!-- ROI Calculator -->
+    <section class="roi-section">
         <div class="container">
-            <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">How Weekend Radar Works</h2>
-            <div class="how-grid">
-                <div class="how-item">
-                    <div class="how-icon">📡</div>
-                    <h3>Auto-Scanning</h3>
-                    <p>We scan flight and hotel prices every 6 hours from LAX, ONT, and SNA airports</p>
+            <h2 class="section-title" style="text-align: center; margin-bottom: 1rem;">💰 See What You're Saving</h2>
+            <p style="text-align: center; color: #065f46; margin-bottom: 2rem;">Weekend Radar does the searching for you. Here's what that's worth:</p>
+            
+            <div class="roi-card">
+                <div class="roi-controls">
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Weekend trips per year</label>
+                        <select id="roiTrips" class="form-select" onchange="calculateROI()">
+                            <option value="2">2 trips</option>
+                            <option value="4" selected>4 trips</option>
+                            <option value="6">6 trips</option>
+                            <option value="12">12 trips</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Hours spent searching per trip</label>
+                        <select id="roiHours" class="form-select" onchange="calculateROI()">
+                            <option value="1">1 hour</option>
+                            <option value="2">2 hours</option>
+                            <option value="3" selected>3 hours</option>
+                            <option value="5">5+ hours</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="how-item">
-                    <div class="how-icon">🎯</div>
-                    <h3>Deal Detection</h3>
-                    <p>When prices drop significantly below average, we flag them as hot deals</p>
+                
+                <div class="roi-results">
+                    <div class="roi-result">
+                        <div style="font-size: 0.9rem; opacity: 0.9;">⏰ Time Saved Per Year</div>
+                        <div class="roi-number" id="roiTime">12</div>
+                        <div>hours back in your life</div>
+                    </div>
+                    <div class="roi-result money">
+                        <div style="font-size: 0.9rem; opacity: 0.9;">💰 Money Saved Per Year</div>
+                        <div class="roi-number" id="roiMoney">$800</div>
+                        <div>on average (30% savings)</div>
+                    </div>
                 </div>
-                <div class="how-item">
-                    <div class="how-icon">🔔</div>
-                    <h3>Alert System</h3>
-                    <p>Get notified when radar detects deals matching your preferences</p>
-                </div>
-                <div class="how-item">
-                    <div class="how-icon">✈️</div>
-                    <h3>You Save</h3>
-                    <p>Book the deal or skip it - no pressure, just information</p>
-                </div>
+                
+                <p style="text-align: center; color: #6b7280; font-size: 0.85rem; margin-top: 1.5rem;">
+                    * Based on typical deal discounts of 25-35% and eliminating manual search time across multiple sites
+                </p>
             </div>
         </div>
     </section>
@@ -502,154 +491,220 @@
             <a href="#">Affiliate Disclosure</a>
         </p>
         <p style="margin-top: 0.75rem; font-size: 0.8rem;">
-            © 2024 Weekend Radar • Prices auto-updated • Affiliate links help keep the radar running
+            © 2024 Weekend Radar • Auto-updated • Affiliate links help keep the radar running
         </p>
     </footer>
     
     <script>
-        // Load signup count
-        function updateSignupCount() {
-            const subscribers = JSON.parse(localStorage.getItem('weekend_radar_subs') || '[]');
-            document.getElementById('signupCount').textContent = subscribers.length;
-        }
+        // Data storage
+        let allDeals = {
+            flights: [],
+            hotels: [],
+            events: [],
+            dining: [],
+            bars: []
+        };
         
-        // Load metadata
-        async function loadMetadata() {
+        // Load all data
+        async function loadAllData() {
             try {
-                const response = await fetch('./metadata.json');
-                const data = await response.json();
+                // Load flights
+                const flightsRes = await fetch('./deals_data.json');
+                allDeals.flights = await flightsRes.json();
                 
-                const lastUpdated = new Date(data.lastUpdated);
-                const timeAgo = getTimeAgo(lastUpdated);
-                document.getElementById('lastUpdated').textContent = timeAgo;
+                // Load hotels
+                const hotelsRes = await fetch('./hotels_data.json');
+                allDeals.hotels = await hotelsRes.json();
+                
+                // Load events
+                const eventsRes = await fetch('./events_data.json');
+                allDeals.events = await eventsRes.json();
+                
+                // Load dining (optional - won't fail if missing)
+                try {
+                    const diningRes = await fetch('./dining_data.json');
+                    allDeals.dining = await diningRes.json();
+                } catch(e) {}
+                
+                // Load bars (optional - won't fail if missing)
+                try {
+                    const barsRes = await fetch('./bars_data.json');
+                    allDeals.bars = await barsRes.json();
+                } catch(e) {}
+                
+                // Load metadata
+                const metaRes = await fetch('./metadata.json');
+                const meta = await metaRes.json();
+                document.getElementById('lastUpdated').textContent = getTimeAgo(new Date(meta.lastUpdated));
+                
+                // Apply initial filters
+                applyFilters();
                 
             } catch (error) {
-                document.getElementById('lastUpdated').textContent = 'Just now';
+                document.getElementById('dealsGrid').innerHTML = '<div class="no-data">Radar offline. Refresh to retry.</div>';
             }
         }
         
-        function getTimeAgo(date) {
-            const seconds = Math.floor((new Date() - date) / 1000);
+        // Apply filters
+        function applyFilters() {
+            const airport = document.getElementById('airportFilter').value;
+            const category = document.getElementById('categoryFilter').value;
             
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
-            if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
-            return `${Math.floor(seconds / 86400)} days ago`;
-        }
-        
-        // Load flights
-        async function loadFlights() {
-            try {
-                const response = await fetch('./deals_data.json');
-                const flights = await response.json();
-                
-                document.getElementById('flightCount').textContent = `${flights.length} detected`;
-                
-                if (flights.length === 0) {
-                    document.getElementById('flightsGrid').innerHTML = '<div class="no-data">No deals on radar. Check back soon!</div>';
-                    return;
-                }
-                
-                flights.sort((a, b) => b.savingsPercent - a.savingsPercent);
-                
-                document.getElementById('flightsGrid').innerHTML = flights.slice(0, 6).map(flight => `
-                    <div class="deal-card ${flight.isHot ? 'hot' : ''}">
-                        ${flight.isHot ? '<span class="deal-badge">🔥 HOT DEAL</span>' : ''}
-                        <div class="deal-route">${flight.origin} → ${getDestName(flight.destination)}</div>
-                        <div class="deal-price">$${Math.round(flight.price)} <span class="deal-original">$${Math.round(flight.originalPrice)}</span></div>
-                        <div class="deal-savings">Save ${flight.savingsPercent}%</div>
-                        <div class="deal-info">
-                            ✈️ ${flight.airline}<br>
-                            📅 ${formatDate(flight.departureDate)} - ${formatDate(flight.returnDate)}
-                        </div>
-                        <button class="btn-book" onclick="window.open('${flight.bookingUrl}', '_blank')">
-                            View Deal
-                        </button>
-                    </div>
-                `).join('');
-                
-            } catch (error) {
-                document.getElementById('flightsGrid').innerHTML = '<div class="no-data">Radar offline. Refresh to retry.</div>';
+            // Save preferences
+            localStorage.setItem('preferred_airport', airport);
+            localStorage.setItem('preferred_category', category);
+            
+            let filtered = [];
+            let title = '📡 ';
+            
+            if (category === 'all') {
+                // Show everything
+                filtered = [
+                    ...filterFlights(allDeals.flights, airport).slice(0, 6),
+                    ...allDeals.hotels.slice(0, 3),
+                    ...allDeals.events.slice(0, 6),
+                    ...allDeals.dining.slice(0, 3),
+                    ...allDeals.bars.slice(0, 3)
+                ];
+                title += 'All Deals';
+            } else if (category === 'flights') {
+                filtered = filterFlights(allDeals.flights, airport);
+                title += 'Flight Deals';
+            } else if (category === 'hotels') {
+                filtered = allDeals.hotels;
+                title += 'Hotel Deals';
+            } else if (category === 'arts' || category === 'sports' || category === 'comedy') {
+                filtered = filterEvents(allDeals.events, category);
+                title += getCategoryName(category);
+            } else if (category === 'dining') {
+                filtered = allDeals.dining;
+                title += 'Dining Deals';
+            } else if (category === 'bars') {
+                filtered = allDeals.bars;
+                title += 'Bar & Nightlife';
             }
+            
+            document.getElementById('sectionTitle').textContent = title;
+            document.getElementById('dealCount').textContent = `${filtered.length} detected`;
+            
+            displayDeals(filtered, category);
         }
         
-        // Load hotels
-        async function loadHotels() {
-            try {
-                const response = await fetch('./hotels_data.json');
-                const hotels = await response.json();
-                
-                document.getElementById('hotelCount').textContent = `${hotels.length} detected`;
-                
-                if (hotels.length === 0) {
-                    document.getElementById('hotelsGrid').innerHTML = '<div class="no-data">No hotel deals detected.</div>';
-                    return;
-                }
-                
-                document.getElementById('hotelsGrid').innerHTML = hotels.map(hotel => `
-                    <div class="deal-card hotel-card">
-                        <div class="deal-route">${hotel.name}</div>
-                        <div class="hotel-rating">📍 ${hotel.city} • ${'⭐'.repeat(hotel.starRating)} ${hotel.userRating}/5</div>
-                        <div class="deal-price">$${Math.round(hotel.pricePerNight)}/nt <span class="deal-original">$${Math.round(hotel.originalPrice)}</span></div>
-                        <div class="deal-savings">Save ${hotel.savingsPercent}%</div>
-                        <div class="deal-info">
-                            📅 ${formatDate(hotel.checkIn)} - ${formatDate(hotel.checkOut)}
-                        </div>
-                        <button class="btn-book" style="background: var(--secondary);" onclick="window.open('${hotel.bookingUrl}', '_blank')">
-                            View Hotel
-                        </button>
-                    </div>
-                `).join('');
-                
-            } catch (error) {
-                document.getElementById('hotelsGrid').innerHTML = '<div class="no-data">Hotel radar offline.</div>';
+        // Filter functions
+        function filterFlights(flights, airport) {
+            if (airport === 'all') return flights;
+            return flights.filter(f => f.origin === airport);
+        }
+        
+        function filterEvents(events, category) {
+            const categoryMap = {
+                'arts': ['Arts & Theatre', 'Arts', 'Theatre', 'Theater'],
+                'sports': ['Sports'],
+                'comedy': ['Comedy']
+            };
+            const cats = categoryMap[category] || [];
+            return events.filter(e => cats.some(c => e.category.includes(c)));
+        }
+        
+        function getCategoryName(cat) {
+            const names = {
+                'arts': 'Arts & Theater',
+                'sports': 'Sports Events',
+                'comedy': 'Comedy Shows'
+            };
+            return names[cat] || cat;
+        }
+        
+        // Display deals
+        function displayDeals(deals, type) {
+            if (!deals || deals.length === 0) {
+                document.getElementById('dealsGrid').innerHTML = '<div class="no-data">No deals match your filters. Try different settings!</div>';
+                return;
             }
+            
+            const html = deals.map(deal => {
+                if (deal.origin) return renderFlight(deal);
+                if (deal.checkIn) return renderHotel(deal);
+                if (deal.venue) return renderEvent(deal);
+                if (deal.rating) return renderVenue(deal);
+                return '';
+            }).join('');
+            
+            document.getElementById('dealsGrid').innerHTML = html;
         }
         
-        // Load events
-        async function loadEvents() {
-            try {
-                const response = await fetch('./events_data.json');
-                const events = await response.json();
-                
-                document.getElementById('eventCount').textContent = `${events.length} detected`;
-                
-                if (events.length === 0) {
-                    document.getElementById('eventsGrid').innerHTML = '<div class="no-data">No events detected.</div>';
-                    return;
-                }
-                
-                document.getElementById('eventsGrid').innerHTML = events.slice(0, 6).map(event => `
-                    <div class="deal-card event-card">
-                        <span class="event-category">${event.category}</span>
-                        <div class="deal-route">${event.name}</div>
-                        <div class="deal-info">
-                            📍 ${event.venue}, ${event.city}<br>
-                            <span class="event-date">📅 ${formatDate(event.date)} at ${event.time}</span>
-                        </div>
-                        <div class="deal-price" style="font-size: 1.4rem;">
-                            ${event.priceMin > 0 ? `$${event.priceMin} - $${event.priceMax}` : 'Free'}
-                        </div>
-                        <button class="btn-book" style="background: #8b5cf6;" onclick="window.open('${event.url}', '_blank')">
-                            Get Tickets
-                        </button>
+        // Render functions
+        function renderFlight(flight) {
+            return `
+                <div class="deal-card ${flight.isHot ? 'hot' : ''}">
+                    ${flight.isHot ? '<span class="deal-badge">🔥 HOT DEAL</span>' : ''}
+                    <div class="deal-route">${flight.origin} → ${getDestName(flight.destination)}</div>
+                    <div class="deal-price">$${Math.round(flight.price)} <span class="deal-original">$${Math.round(flight.originalPrice)}</span></div>
+                    <div class="deal-savings">Save ${flight.savingsPercent}%</div>
+                    <div class="deal-info">
+                        ✈️ ${flight.airline}<br>
+                        📅 ${formatDate(flight.departureDate)} - ${formatDate(flight.returnDate)}
                     </div>
-                `).join('');
-                
-            } catch (error) {
-                document.getElementById('eventsGrid').innerHTML = '<div class="no-data">Event radar offline.</div>';
-            }
+                    <button class="btn-book" onclick="window.open('${flight.bookingUrl}', '_blank')">View Deal</button>
+                </div>
+            `;
         }
         
+        function renderHotel(hotel) {
+            return `
+                <div class="deal-card" style="border-left-color: var(--secondary);">
+                    <div class="deal-route">${hotel.name}</div>
+                    <div style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 0.3rem;">
+                        📍 ${hotel.city} • ${'⭐'.repeat(hotel.starRating)} ${hotel.userRating}/5
+                    </div>
+                    <div class="deal-price">$${Math.round(hotel.pricePerNight)}/nt <span class="deal-original">$${Math.round(hotel.originalPrice)}</span></div>
+                    <div class="deal-savings">Save ${hotel.savingsPercent}%</div>
+                    <div class="deal-info">📅 ${formatDate(hotel.checkIn)} - ${formatDate(hotel.checkOut)}</div>
+                    <button class="btn-book" style="background: var(--secondary);" onclick="window.open('${hotel.bookingUrl}', '_blank')">View Hotel</button>
+                </div>
+            `;
+        }
+        
+        function renderEvent(event) {
+            return `
+                <div class="deal-card" style="border-left-color: #8b5cf6;">
+                    <span style="display: inline-block; background: #ede9fe; color: #7c3aed; padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600; margin-bottom: 0.5rem;">${event.category}</span>
+                    <div class="deal-route">${event.name}</div>
+                    <div class="deal-info">
+                        📍 ${event.venue}, ${event.city}<br>
+                        📅 ${formatDate(event.date)} at ${event.time}
+                    </div>
+                    <div class="deal-price" style="font-size: 1.4rem;">
+                        ${event.priceMin > 0 ? `$${event.priceMin} - $${event.priceMax}` : 'Free'}
+                    </div>
+                    <button class="btn-book" style="background: #8b5cf6;" onclick="window.open('${event.url}', '_blank')">Get Tickets</button>
+                </div>
+            `;
+        }
+        
+        function renderVenue(venue) {
+            const color = venue.type === 'dining' ? '#f59e0b' : '#8b5cf6';
+            const icon = venue.type === 'dining' ? '🍽️' : '🍺';
+            return `
+                <div class="deal-card" style="border-left-color: ${color};">
+                    <span style="display: inline-block; background: ${color}20; color: ${color}; padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600; margin-bottom: 0.5rem;">${icon} ${venue.priceLevel || '$$'}</span>
+                    <div class="deal-route">${venue.name}</div>
+                    <div class="deal-info">
+                        📍 ${venue.location}<br>
+                        ⭐ ${venue.rating}/5 (${venue.reviewCount} reviews)
+                    </div>
+                    <button class="btn-book" style="background: ${color};" onclick="window.open('${venue.url}', '_blank')">View Details</button>
+                </div>
+            `;
+        }
+        
+        // Helper functions
         function getDestName(code) {
             const names = {
-                'LAS': 'Las Vegas',
-                'SFO': 'San Francisco',
-                'PHX': 'Phoenix',
-                'SEA': 'Seattle',
-                'DEN': 'Denver',
-                'SAN': 'San Diego',
-                'PDX': 'Portland'
+                'LAS': 'Las Vegas', 'SFO': 'San Francisco', 'PHX': 'Phoenix',
+                'SEA': 'Seattle', 'DEN': 'Denver', 'SAN': 'San Diego',
+                'PDX': 'Portland', 'SLC': 'Salt Lake City', 'BOS': 'Boston',
+                'NYC': 'New York', 'MIA': 'Miami', 'AUS': 'Austin'
             };
             return names[code] || code;
         }
@@ -659,28 +714,52 @@
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
         
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+            return `${Math.floor(seconds / 86400)} days ago`;
+        }
+        
+        // ROI Calculator
+        function calculateROI() {
+            const trips = parseInt(document.getElementById('roiTrips').value);
+            const hours = parseInt(document.getElementById('roiHours').value);
+            
+            // Time saved
+            const totalHours = trips * hours;
+            document.getElementById('roiTime').textContent = totalHours;
+            
+            // Money saved (estimate $400 per trip at 30% savings)
+            const savings = Math.round(trips * 400 * 0.30);
+            document.getElementById('roiMoney').textContent = `$${savings.toLocaleString()}`;
+        }
+        
         // Handle signup
         function handleSignup(e) {
             e.preventDefault();
             const email = document.getElementById('emailInput').value;
             
-            const subscribers = JSON.parse(localStorage.getItem('weekend_radar_subs') || '[]');
-            if (!subscribers.some(s => s.email === email)) {
-                subscribers.push({ email, date: new Date().toISOString() });
-                localStorage.setItem('weekend_radar_subs', JSON.stringify(subscribers));
+            const subs = JSON.parse(localStorage.getItem('weekend_radar_subs') || '[]');
+            if (!subs.some(s => s.email === email)) {
+                subs.push({ email, date: new Date().toISOString() });
+                localStorage.setItem('weekend_radar_subs', JSON.stringify(subs));
             }
             
-            updateSignupCount();
             document.getElementById('signupForm').style.display = 'none';
             document.getElementById('successMessage').style.display = 'block';
         }
         
         // Initialize
-        updateSignupCount();
-        loadMetadata();
-        loadFlights();
-        loadHotels();
-        loadEvents();
+        calculateROI();
+        loadAllData();
+        
+        // Load saved preferences
+        const savedAirport = localStorage.getItem('preferred_airport');
+        const savedCategory = localStorage.getItem('preferred_category');
+        if (savedAirport) document.getElementById('airportFilter').value = savedAirport;
+        if (savedCategory) document.getElementById('categoryFilter').value = savedCategory;
     </script>
 </body>
 </html>
