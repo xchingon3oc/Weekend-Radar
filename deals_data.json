@@ -5,12 +5,12 @@
     "price": 89,
     "originalPrice": 156,
     "airline": "Spirit",
-    "departureDate": "2026-03-13",
-    "returnDate": "2026-03-15",
+    "departureDate": "2026-03-20",
+    "returnDate": "2026-03-22",
     "savings": 67,
     "savingsPercent": 43,
     "isHot": true,
-    "foundAt": "2026-03-11T06:53:24.863665",
+    "foundAt": "2026-03-14T06:42:15.415199",
     "bookingUrl": "https://www.kayak.com/flights/LAX-LAS"
   },
   {
@@ -19,12 +19,12 @@
     "price": 124,
     "originalPrice": 198,
     "airline": "United",
-    "departureDate": "2026-03-13",
-    "returnDate": "2026-03-15",
+    "departureDate": "2026-03-20",
+    "returnDate": "2026-03-22",
     "savings": 74,
     "savingsPercent": 37,
     "isHot": true,
-    "foundAt": "2026-03-11T06:53:24.863674",
+    "foundAt": "2026-03-14T06:42:15.415208",
     "bookingUrl": "https://www.kayak.com/flights/ONT-SFO"
   },
   {
@@ -33,12 +33,12 @@
     "price": 67,
     "originalPrice": 134,
     "airline": "American",
-    "departureDate": "2026-03-13",
-    "returnDate": "2026-03-15",
+    "departureDate": "2026-03-20",
+    "returnDate": "2026-03-22",
     "savings": 67,
     "savingsPercent": 50,
     "isHot": true,
-    "foundAt": "2026-03-11T06:53:24.863679",
+    "foundAt": "2026-03-14T06:42:15.415213",
     "bookingUrl": "https://www.kayak.com/flights/SNA-PHX"
   }
 ]
