@@ -7,12 +7,12 @@
     "starRating": 5,
     "userRating": 4.7,
     "reviewCount": 12500,
-    "checkIn": "2026-04-24",
-    "checkOut": "2026-04-26",
+    "checkIn": "2026-05-01",
+    "checkOut": "2026-05-03",
     "savings": 130,
     "savingsPercent": 45,
     "bookingUrl": "https://www.booking.com/hotel/us/the-venetian-resort.html",
-    "foundAt": "2026-04-22T07:46:18.722957"
+    "foundAt": "2026-04-25T07:11:37.997960"
   },
   {
     "name": "Hilton San Francisco Union Square",
@@ -22,11 +22,11 @@
     "starRating": 4,
     "userRating": 4.3,
     "reviewCount": 8900,
-    "checkIn": "2026-04-24",
-    "checkOut": "2026-04-26",
+    "checkIn": "2026-05-01",
+    "checkOut": "2026-05-03",
     "savings": 123,
     "savingsPercent": 39,
     "bookingUrl": "https://www.booking.com/hotel/us/hilton-san-francisco.html",
-    "foundAt": "2026-04-22T07:46:18.722962"
+    "foundAt": "2026-04-25T07:11:37.997965"
   }
 ]
