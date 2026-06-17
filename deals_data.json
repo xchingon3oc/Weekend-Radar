@@ -10,7 +10,7 @@
     "savings": 67,
     "savingsPercent": 43,
     "isHot": true,
-    "foundAt": "2026-06-13T08:53:56.054077",
+    "foundAt": "2026-06-17T10:53:48.107466",
     "bookingUrl": "https://www.kayak.com/flights/LAX-LAS"
   },
   {
@@ -24,7 +24,7 @@
     "savings": 74,
     "savingsPercent": 37,
     "isHot": true,
-    "foundAt": "2026-06-13T08:53:56.054086",
+    "foundAt": "2026-06-17T10:53:48.107474",
     "bookingUrl": "https://www.kayak.com/flights/ONT-SFO"
   },
   {
@@ -38,7 +38,7 @@
     "savings": 67,
     "savingsPercent": 50,
     "isHot": true,
-    "foundAt": "2026-06-13T08:53:56.054092",
+    "foundAt": "2026-06-17T10:53:48.107480",
     "bookingUrl": "https://www.kayak.com/flights/SNA-PHX"
   }
 ]
